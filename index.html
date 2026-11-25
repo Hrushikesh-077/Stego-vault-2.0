@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>StegoVault 2.0 – Pro-grade steganography. Private by design.</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+:root{--bg:#fbfaff;--pn:#fff;--tx:#14122b;--mut:#6b6885;--ln:#e9e6f7;--pr:#5b2be0;--pr2:#8b5cf6;--dk:#12102a;--in:#fff;--ok:#0f7a3d;--er:#c4271c;--dz1:#faf8ff;--dz2:#f1edff;--sh:0 12px 40px rgba(91,43,224,.12);--b1:#c4b5fd;--b2:#fbcfe8;--b3:#e6f7b8;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0c0a1a;--pn:#16132b;--tx:#f1f0ff;--mut:#a6a2c8;--ln:#2b2748;--pr:#8b6cff;--pr2:#a78bfa;--dk:#2a2650;--in:#100e22;--ok:#5fd08e;--er:#ff8a80;--dz1:#1a1733;--dz2:#211d40;--sh:0 12px 40px rgba(0,0,0,.45);--b1:#3b2a8f;--b2:#5a1f58;--b3:#27391a;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0c0a1a;--pn:#16132b;--tx:#f1f0ff;--mut:#a6a2c8;--ln:#2b2748;--pr:#8b6cff;--pr2:#a78bfa;--dk:#2a2650;--in:#100e22;--ok:#5fd08e;--er:#ff8a80;--dz1:#1a1733;--dz2:#211d40;--sh:0 12px 40px rgba(0,0,0,.45);--b1:#3b2a8f;--b2:#5a1f58;--b3:#27391a;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}*{box-sizing:border-box}
+body{margin:0;color:var(--tx);font:15px/1.6 Inter,system-ui,-apple-system,"Segoe UI",sans-serif;background:radial-gradient(ellipse 60% 40% at 8% 0%,var(--b1),transparent 70%),radial-gradient(ellipse 50% 35% at 95% 8%,var(--b2),transparent 70%),radial-gradient(ellipse 55% 35% at 85% 42%,var(--b3),transparent 70%),var(--bg);background-repeat:no-repeat}
+.w{max-width:960px;margin:0 auto;padding:16px 16px 36px}
+.mono{font:500 .68rem "JetBrains Mono",ui-monospace,Menlo,monospace;letter-spacing:.14em;text-transform:uppercase;color:var(--pr)}
+.pill{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;background:var(--pn);border:1px solid var(--ln);border-radius:99px;padding:8px 10px 8px 16px;box-shadow:var(--sh)}
+.lg{display:flex;align-items:center;gap:8px;font-weight:700;letter-spacing:-.02em}
+.lgi{width:24px;height:24px;border-radius:8px;background:linear-gradient(135deg,var(--pr),var(--pr2));display:inline-grid;place-items:center;color:#fff;font-size:.8rem;font-style:normal}
+.links{display:flex;gap:4px}
+.links button{border:0;background:none;color:var(--mut);font:500 .85rem Inter,sans-serif;padding:7px 14px;border-radius:99px;cursor:pointer}
+.links button.on{background:var(--dz2);color:var(--pr)}
+.nb{font-size:.78rem;font-weight:600;background:var(--dk);color:#fff;padding:7px 14px;border-radius:99px}
+.hero{text-align:center;padding:54px 6px 30px}
+.chipt{display:inline-flex;gap:8px;align-items:center;background:var(--pn);border:1px solid var(--ln);border-radius:99px;padding:5px 14px;font-size:.78rem;color:var(--mut)}
+h1{font-weight:800;letter-spacing:-.05em;line-height:1.02;font-size:clamp(2.2rem,7.4vw,4.2rem);margin:18px 0 14px}
+.gr{background:linear-gradient(90deg,var(--pr),#60a5fa 55%,#e879f9);-webkit-background-clip:text;background-clip:text;color:transparent}
+.sub{color:var(--mut);max-width:580px;margin:0 auto}
+.card{display:none;background:var(--pn);border:1px solid var(--ln);border-radius:24px;padding:26px;box-shadow:var(--sh);margin-top:14px}
+.card.on{display:block}
+.sec{padding:14px 0}.sec:first-child{padding-top:0}
+.sec .mono{display:block;margin-bottom:8px}
+.dz{display:flex;flex-direction:column;align-items:center;gap:4px;padding:26px 14px;border:1.5px dashed var(--b1);border-radius:18px;background:linear-gradient(180deg,var(--dz1),var(--dz2));cursor:pointer;text-align:center;transition:.15s}
+.dz:hover,.dz.drag{border-color:var(--pr);transform:translateY(-1px)}
+.dz input{display:none}
+.dzi{width:40px;height:40px;border-radius:12px;background:var(--pr);color:#fff;display:grid;place-items:center;font-size:1.1rem}
+.dz b{font-weight:600}.dz small{color:var(--mut);font-size:.78rem}
+input[type=password],textarea,select{width:100%;padding:12px 14px;border:1px solid var(--ln);border-radius:14px;background:var(--in);color:var(--tx);font:inherit}
+input:focus,textarea:focus,select:focus{outline:2px solid var(--pr);outline-offset:1px}
+textarea{min-height:100px;resize:vertical}
+.seg{display:inline-flex;background:var(--dz2);border-radius:99px;padding:4px;margin-bottom:12px}
+.seg button{border:0;background:none;padding:7px 18px;border-radius:99px;font:600 .82rem Inter,sans-serif;color:var(--mut);cursor:pointer}
+.seg button.on{background:var(--pn);color:var(--pr);box-shadow:0 2px 8px rgba(91,43,224,.15)}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+@media(max-width:640px){.opts{grid-template-columns:1fr}.card{padding:18px 14px}}
+.bar{height:6px;border-radius:9px;background:var(--ln);overflow:hidden;margin-top:8px}
+.bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--pr),#60a5fa);border-radius:9px;transition:width .25s}
+small,.mut{color:var(--mut);font-size:.8rem}
+.chk{display:flex;gap:8px;align-items:center;margin-top:14px;font-size:.88rem}
+button.go{margin-top:8px;padding:13px 24px;border:0;border-radius:14px;background:var(--pr);color:#fff;font:600 .95rem Inter,sans-serif;cursor:pointer;box-shadow:0 8px 22px rgba(91,43,224,.35)}
+button.go:hover{filter:brightness(1.08)}
+button.go.s{background:var(--dk);box-shadow:none;color:#fff}
+.msg{margin-top:16px;font-weight:600}.ok{color:var(--ok)}.er{color:var(--er)}
+.stats{margin-top:12px;display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px}
+.row{display:flex;flex-direction:column-reverse;gap:2px;border:1px solid var(--ln);border-radius:16px;padding:12px 14px;background:var(--dz1);font-weight:700;font-size:1.05rem}
+.row .k{font:500 .66rem "JetBrains Mono",monospace;letter-spacing:.1em;text-transform:uppercase;color:var(--mut)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-top:16px}
+figure{margin:0;text-align:center;font-size:.76rem;color:var(--mut)}
+canvas,img{max-width:100%;border-radius:14px;border:1px solid var(--ln);display:block;margin:0 auto 6px}
+.oc{position:absolute;right:8px;top:8px;background:var(--pn);border:1px solid var(--ln);border-radius:99px;padding:2px 10px;font-size:.7rem;font-weight:600;color:var(--pr)}
+pre{white-space:pre-wrap;word-break:break-word;background:var(--dz1);border:1px solid var(--ln);border-radius:14px;padding:14px;margin:12px 0 0}
+.priv{display:flex;gap:10px;align-items:center;margin-top:14px;padding:12px 16px;border-radius:16px;background:var(--pn);border:1px solid var(--ln);font-size:.82rem;color:var(--mut)}
+.priv b{color:var(--tx)}
+.fh{margin:56px 0 18px}.fh h2{font-size:clamp(1.6rem,5vw,2.4rem);letter-spacing:-.045em;line-height:1.05;margin:8px 0 0}
+.fs{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px}
+.fc{background:var(--pn);border:1px solid var(--ln);border-radius:20px;padding:18px;box-shadow:var(--sh)}
+.fi{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;margin-bottom:12px;font-size:1.1rem}
+.fc b{display:block;letter-spacing:-.01em}.fc p{margin:4px 0 0;color:var(--mut);font-size:.85rem}
+.tw{overflow-x:auto}table{width:100%;border-collapse:collapse;font-size:.88rem;margin:10px 0}
+th,td{padding:9px 8px;border-bottom:1px solid var(--ln);text-align:left;vertical-align:top}th{color:var(--pr);font:500 .66rem "JetBrains Mono",monospace;letter-spacing:.12em;text-transform:uppercase}
+h3{margin:18px 0 6px;letter-spacing:-.02em}
+ul.t{list-style:none;padding:0;margin:14px 0 0;font-size:.9rem}ul.t li{padding:8px 12px;margin-top:6px;border-radius:12px;background:var(--dz1);border:1px solid var(--ln)}
+.wm{margin:64px 0 0;text-align:center;font-weight:800;letter-spacing:-.06em;font-size:clamp(3rem,16vw,9rem);line-height:.9;background:linear-gradient(180deg,var(--b1),transparent);-webkit-background-clip:text;background-clip:text;color:transparent;user-select:none}
+.foot{text-align:center;color:var(--mut);font-size:.8rem;margin-top:6px}
+</style></head><body><div class="w">
+<nav class="pill"><span class="lg"><i class="lgi">🔐</i>StegoVault</span><div class="links"><button id="t1" class="on">Hide</button><button id="t2">Extract</button><button id="t3">About &amp; Tests</button></div><span class="nb">🔒 On-device</span></nav>
+
+<header class="hero"><span class="chipt">✦ Free · No upload · Runs in your browser</span>
+<h1>Pro-grade steganography.<br><span class="gr">Private by design.</span></h1>
+<p class="sub">Hide text or any file inside an image. Password-seeded random embedding, AES-256 encryption and a full quality analysis, all on your device.</p></header>
+
+<div class="card on" id="c1">
+<div class="sec"><span class="mono">Step 1 · Cover image</span>
+<label class="dz"><input type="file" id="cov" accept="image/*"><span class="dzi">↑</span><b class="dzt">Drop an image here, or click to choose</b><small id="ci">PNG, BMP or JPG · saved as lossless PNG</small></label></div>
+<div class="sec"><span class="mono">Step 2 · What to hide</span>
+<div class="seg"><button id="mT" class="on">Text message</button><button id="mF">Any file</button></div>
+<div id="bT"><textarea id="msg" aria-label="Secret message" placeholder="Type the confidential text to hide…"></textarea></div>
+<div id="bF" style="display:none"><label class="dz"><input type="file" id="ff"><span class="dzi">＋</span><b class="dzt">Drop a file here, or click to choose</b><small>Documents, images, archives…</small></label></div></div>
+<div class="sec"><div class="opts">
+<div><span class="mono">Step 3 · Password (optional)</span><input type="password" id="pw" aria-label="Password" placeholder="Enables AES-256 encryption"><div class="bar"><i id="sb"></i></div><small id="st">No password · data stored unencrypted</small></div>
+<div><span class="mono">Step 4 · Bits per channel</span><select id="dp" aria-label="Bits per channel"><option value="1">1 bit · best quality</option><option value="2">2 bits · balanced</option><option value="3">3 bits · largest capacity</option></select>
+<label class="chk"><input type="checkbox" id="sh" checked disabled> <span>Spread bits randomly (needs password)</span></label></div></div></div>
+<div class="sec"><span class="mono">Capacity</span><small id="cap">Choose a cover image to see its capacity.</small><div class="bar"><i id="cb"></i></div></div>
+<button class="go" id="goH">Embed &amp; analyse →</button><div id="oH"></div>
+</div>
+
+<div class="card" id="c2">
+<div class="sec"><span class="mono">Step 1 · Stego image</span>
+<label class="dz"><input type="file" id="xf" accept="image/*"><span class="dzi">↑</span><b class="dzt">Drop the stego image here, or click to choose</b><small>PNG or BMP · must not be re-compressed</small></label></div>
+<div class="sec"><span class="mono">Step 2 · Password (if one was used)</span><input type="password" id="xp" aria-label="Password"></div>
+<button class="go" id="goX">Extract data →</button><div id="oX"></div>
+</div>
+
+<div class="card" id="c3">
+<span class="mono">What’s new in version 2</span>
+<div class="tw"><table><tr><th>Feature</th><th>Version 1</th><th>Version 2</th></tr>
+<tr><td>Payload</td><td>Text only</td><td>Text <b>and any file</b></td></tr>
+<tr><td>Embedding order</td><td>Sequential, predictable</td><td><b>Password-seeded random spread</b></td></tr>
+<tr><td>Capacity</td><td>Error after clicking</td><td><b>Live meter</b> while you type</td></tr>
+<tr><td>Bit depth</td><td>Fixed 1 LSB</td><td>1, 2 or 3 bits</td></tr>
+<tr><td>Analysis</td><td>MSE, PSNR</td><td>+ histogram, change map, LSB plane</td></tr>
+<tr><td>Testing</td><td>Manual</td><td><b>Built-in self-test</b></td></tr></table></div>
+<h3>Under the hood</h3>
+<p class="mut" style="margin:0">Header “STG2” + flags + length + salt · AES-256-GCM with PBKDF2-SHA-256 · 1–3 least significant bits per R, G, B channel · password-seeded shuffle chooses which channels carry the bits · lossless PNG or BMP only · images over 1600 px are resized for speed.</p>
+<button class="go s" id="goT" style="margin-top:16px">Run self-test →</button><ul class="t" id="oT"></ul>
+</div>
+
+<div class="priv">🔒 <span><b>Your images never leave your device.</b> Everything runs locally in your browser. Nothing is uploaded, stored or seen by us.</span></div>
+
+<div class="fh"><span class="mono">Why StegoVault</span><h2>Pro-grade tools.<br><span class="gr">Private by design.</span></h2></div>
+<div class="fs">
+<div class="fc"><span class="fi" style="background:#ede9fe">📄</span><b>Text or any file</b><p>Hide messages, PDFs, images or archives. The filename comes back too.</p></div>
+<div class="fc"><span class="fi" style="background:#cffafe">🔑</span><b>AES-256 on your device</b><p>Your password never leaves the browser. Keys come from PBKDF2-SHA-256.</p></div>
+<div class="fc"><span class="fi" style="background:#fce7f3">🎲</span><b>Random bit spreading</b><p>The password shuffles which pixels carry data, so there is no pattern to find.</p></div>
+<div class="fc"><span class="fi" style="background:#ecfccb">📊</span><b>Live quality analysis</b><p>MSE, PSNR, histogram, change map and LSB-plane view after every embed.</p></div>
+</div>
+<div class="wm">StegoVault</div>
+<div class="foot">Y. Dileep Kumar · K. Hrushikesh Reddy · P. Vennela · Guide: Dr. K. Lokeshwaran<br>Dept. of CSE · School of Computing · 10214CS601 Minor Project-I · Vel Tech</div>
+</div>
+<script>
+//CORE
+const enc=new TextEncoder(),dec=new TextDecoder();
+const di=i=>((i/3)|0)*4+i%3;
+function seq(s,k){const a=new Uint32Array(k);for(let i=0;i<k;i++)a[i]=s+i;return a}
+function rng(a){return()=>{a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+function slots(s,total,k,seed,shuf){if(!shuf)return seq(s,k);const n=total-s,a=seq(s,n),r=rng(seed);for(let i=0;i<k;i++){const j=i+Math.floor(r()*(n-i)),t=a[i];a[i]=a[j];a[j]=t}return a.subarray(0,k)}
+async function kdf(pw,salt){const km=await crypto.subtle.importKey('raw',enc.encode(pw),'PBKDF2',false,['deriveBits']);const b=new Uint8Array(await crypto.subtle.deriveBits({name:'PBKDF2',salt,iterations:100000,hash:'SHA-256'},km,320));return{key:await crypto.subtle.importKey('raw',b.slice(0,32),'AES-GCM',false,['encrypt','decrypt']),seed:new DataView(b.buffer).getUint32(32)}}
+function putBits(d,chs,bytes,depth){let bi=0;const nb=bytes.length*8,mask=(1<<depth)-1;for(let k=0;k<chs.length;k++){let v=0;for(let j=0;j<depth;j++){v=(v<<1)|(bi<nb?(bytes[bi>>3]>>(7-(bi&7)))&1:0);bi++}const x=di(chs[k]);d[x]=(d[x]&~mask)|v}}
+function getBits(d,chs,depth,nbytes){const o=new Uint8Array(nbytes),nb=nbytes*8;let bi=0;for(let k=0;k<chs.length&&bi<nb;k++){const v=d[di(chs[k])];for(let j=depth-1;j>=0&&bi<nb;j--,bi++)o[bi>>3]|=((v>>j)&1)<<(7-(bi&7))}return o}
+const chan=d=>(d.length/4)*3;
+function capacity(d,depth,pw){return Math.max(0,Math.floor((chan(d)-(9+(pw?16:0))*8)*depth/8)-(pw?28:0))}
+async function embedCore(d0,payload,o){const d=new Uint8ClampedArray(d0);let body=payload,flags=(o.depth-1)<<2,salt=null,seed=0;
+ if(o.pw){salt=crypto.getRandomValues(new Uint8Array(16));const q=await kdf(o.pw,salt);seed=q.seed;const iv=crypto.getRandomValues(new Uint8Array(12)),ct=new Uint8Array(await crypto.subtle.encrypt({name:'AES-GCM',iv},q.key,body));body=new Uint8Array(12+ct.length);body.set(iv);body.set(ct,12);flags|=1;if(o.shuf)flags|=2}
+ const HB=9+(salt?16:0),total=chan(d),hb=HB*8,k=Math.ceil(body.length*8/o.depth);
+ if(hb+k>total)throw new Error('Data is too large for this image at the chosen bit depth.');
+ const L=body.length,h=new Uint8Array(HB);h.set([83,84,71,50,flags,L>>>24,(L>>>16)&255,(L>>>8)&255,L&255]);if(salt)h.set(salt,9);
+ putBits(d,seq(0,hb),h,1);putBits(d,slots(hb,total,k,seed,flags&2),body,o.depth);return{d,bodyLen:L,flags}}
+async function extractCore(d,pw){const total=chan(d);if(total<200)throw new Error('Image is too small to hold data.');
+ const h=getBits(d,seq(0,72),1,9);if(String.fromCharCode(h[0],h[1],h[2],h[3])!=='STG2')throw new Error('No hidden data found (or the image was edited or compressed).');
+ const f=h[4],L=((h[5]<<24)|(h[6]<<16)|(h[7]<<8)|h[8])>>>0,depth=((f>>2)&3)+1,en=f&1,hb=(9+(en?16:0))*8,k=Math.ceil(L*8/depth);
+ if(hb+k>total)throw new Error('Header looks corrupted – the image was probably modified.');
+ let seed=0,key=null;if(en){if(!pw)throw new Error('This data is password-protected. Enter the password.');const salt=getBits(d,seq(72,128),1,16),q=await kdf(pw,salt);seed=q.seed;key=q.key}
+ const body=getBits(d,slots(hb,total,k,seed,f&2),depth,L);if(!en)return body;
+ try{return new Uint8Array(await crypto.subtle.decrypt({name:'AES-GCM',iv:body.slice(0,12)},key,body.slice(12)))}catch(e){throw new Error('Wrong password or corrupted data.')}}
+function packText(t){const b=enc.encode(t),o=new Uint8Array(b.length+1);o.set(b,1);return o}
+function packFile(name,data){const n=enc.encode(name).slice(0,255),o=new Uint8Array(2+n.length+data.length);o[0]=1;o[1]=n.length;o.set(n,2);o.set(data,2+n.length);return o}
+function unpack(p){if(p[0]===0)return{type:'text',text:dec.decode(p.slice(1))};const n=p[1];return{type:'file',name:dec.decode(p.slice(2,2+n)),data:p.slice(2+n)}}
+function quality(a,b){let se=0,n=0,ch=0;for(let i=0;i<a.length;i+=4)for(let k=0;k<3;k++){const x=a[i+k]-b[i+k];se+=x*x;n++;if(x)ch++}const mse=se/n;return{mse,psnr:mse?10*Math.log10(65025/mse):Infinity,changed:ch,pct:100*ch/n}}
+//ENDCORE
+const $=i=>document.getElementById(i);
+const say=(el,t,c)=>{el.innerHTML='<div class="msg '+c+'"></div>';el.firstChild.textContent=t};
+function sw(n){[1,2,3].forEach(i=>{$('t'+i).classList.toggle('on',i==n);$('c'+i).classList.toggle('on',i==n)})}
+[1,2,3].forEach(i=>$('t'+i).onclick=()=>sw(i));
+let cover=null,mode='T',fileBytes=null,fileName='';
+function decode(f){
+ return (window.createImageBitmap?createImageBitmap(f).catch(()=>null):Promise.resolve(null)).then(bm=>{
+  if(bm)return bm;
+  return new Promise((ok,no)=>{const r=new FileReader();r.onerror=()=>no(new Error('Could not read the file.'));
+   r.onload=()=>{const i=new Image();i.onload=()=>ok(i);i.onerror=()=>no(new Error('Unsupported image. Please use a PNG, JPG or BMP file.'));i.src=r.result};r.readAsDataURL(f)})})}
+function load(f,keep){return decode(f).then(i=>{let w=i.naturalWidth||i.width,h=i.naturalHeight||i.height;const s=keep?1:Math.min(1,1600/Math.max(w,h));w=Math.round(w*s);h=Math.round(h*s);const c=document.createElement('canvas');c.width=w;c.height=h;const x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,w,h);x.drawImage(i,0,0,w,h);return c})}
+const px=c=>c.getContext('2d').getImageData(0,0,c.width,c.height);
+function mk(w,h,fn){const c=document.createElement('canvas');c.width=w;c.height=h;const x=c.getContext('2d'),id=x.createImageData(w,h);fn(id.data);x.putImageData(id,0,0);return c}
+function fig(c,t){const f=document.createElement('figure');f.appendChild(c);f.appendChild(document.createTextNode(t));return f}
+function fmt(n){return n>=1048576?(n/1048576).toFixed(2)+' MB':n>=1024?(n/1024).toFixed(1)+' KB':n+' bytes'}
+function payload(){if(mode==='T'){const t=$('msg').value;return t?packText(t):null}return fileBytes?packFile(fileName,fileBytes):null}
+function refresh(){const pw=$('pw').value,dp=+$('dp').value;$('sh').disabled=!pw;
+ let sc=0;if(pw){sc=(pw.length>=8)+(pw.length>=12)+(/[a-z]/.test(pw)&&/[A-Z]/.test(pw))+/\d/.test(pw)+/\W/.test(pw)}
+ $('sb').style.width=(sc*20)+'%';$('st').textContent=pw?['Very weak','Weak','Fair','Good','Strong','Excellent'][sc]+' password – AES-256 encryption on':'No password – data stored unencrypted';
+ if(!cover){return}
+ const cap=capacity(px(cover).data,dp,pw),p=payload(),used=p?p.length:0;
+ $('cap').textContent='Capacity: '+fmt(cap)+' · Using: '+fmt(used)+' ('+(cap?Math.round(100*used/cap):0)+'%)';
+ $('cb').style.width=Math.min(100,cap?100*used/cap:0)+'%'}
+$('cov').onchange=async e=>{try{cover=await load(e.target.files[0]);$('ci').textContent=cover.width+'×'+cover.height+' px';refresh()}catch(x){cover=null;$('ci').textContent=x.message}};
+$('mT').onclick=()=>{mode='T';$('mT').classList.add('on');$('mF').classList.remove('on');$('bT').style.display='';$('bF').style.display='none';refresh()};
+$('mF').onclick=()=>{mode='F';$('mF').classList.add('on');$('mT').classList.remove('on');$('bF').style.display='';$('bT').style.display='none';refresh()};
+$('ff').onchange=async e=>{const f=e.target.files[0];if(!f)return;fileName=f.name;fileBytes=new Uint8Array(await f.arrayBuffer());refresh()};
+['msg','pw','dp'].forEach(i=>{$(i).oninput=refresh;$(i).onchange=refresh});
+function dl(name,blob){const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();a.remove()}
+function hist(a,b,w,h){const c=document.createElement('canvas');c.width=w;c.height=h;const x=c.getContext('2d'),H=d=>{const r=new Array(256).fill(0);for(let i=0;i<d.length;i+=4)r[(d[i]+d[i+1]+d[i+2])/3|0]++;return r},A=H(a),B=H(b),m=Math.max(...A,...B)||1;
+ x.fillStyle='rgba(8,12,30,.85)';x.fillRect(0,0,w,h);[[A,'#22d3ee'],[B,'#f472b6']].forEach(([r,col])=>{x.strokeStyle=col;x.lineWidth=1.5;x.beginPath();r.forEach((v,i)=>{const X=i*w/255,Y=h-4-(h-8)*v/m;i?x.lineTo(X,Y):x.moveTo(X,Y)});x.stroke()});return c}
+$('goH').onclick=async()=>{const o=$('oH'),pw=$('pw').value,dp=+$('dp').value,p=payload();
+ if(!cover)return say(o,'Please choose a cover image first.','er');if(!p)return say(o,mode==='T'?'Please enter a secret message.':'Please choose a file to hide.','er');
+ try{say(o,'Working…','mut');await new Promise(r=>setTimeout(r,30));
+ const src=px(cover),shuf=!!pw&&$('sh').checked,r=await embedCore(src.data,p,{pw,shuf,depth:dp}),q=quality(src.data,r.d);
+ const W=cover.width,Hh=cover.height,out=mk(W,Hh,t=>t.set(r.d));
+ const diff=mk(W,Hh,t=>{for(let i=0;i<t.length;i+=4){const ch=src.data[i]!==r.d[i]||src.data[i+1]!==r.d[i+1]||src.data[i+2]!==r.d[i+2];t[i]=ch?244:20;t[i+1]=ch?114:24;t[i+2]=ch?182:48;t[i+3]=255}});
+ const plane=mk(W,Hh,t=>{for(let i=0;i<t.length;i+=4){const v=(r.d[i]&1)*255;t[i]=t[i+1]=t[i+2]=v;t[i+3]=255}});
+ const orig=document.createElement('canvas');orig.width=W;orig.height=Hh;orig.getContext('2d').drawImage(cover,0,0);
+ o.innerHTML='<div class="msg ok">✓ Hidden successfully'+(r.flags&1?' and encrypted':'')+(r.flags&2?', bits spread randomly':'')+'.</div><div class="stats"></div><div class="grid" id="gr"></div><div class="grid" id="g2"></div><div id="dlw"></div>';
+ const st=o.querySelector('.stats');[['Hidden',fmt(p.length)],['Bit depth',dp],['MSE',q.mse.toFixed(5)],['PSNR',q.psnr===Infinity?'∞ dB':q.psnr.toFixed(2)+' dB'],['Channels changed',q.pct.toFixed(2)+'%']].forEach(([k,v])=>{const r=document.createElement('div'),x=document.createElement('span'),y=document.createElement('span');r.className='row';x.className='k';x.textContent=k;y.textContent=v;r.append(x,y);st.appendChild(r)});
+ const g=$('gr');g.appendChild(fig(orig,'Original'));const im=document.createElement('img');im.src=out.toDataURL('image/png');im.alt='Stego image';g.appendChild(fig(im,'Stego image (right-click / long-press → Save image)'));const ch=document.createElement('span');ch.className='oc';ch.textContent='🔒 On-device';g.lastChild.style.position='relative';g.lastChild.appendChild(ch);
+ g.appendChild(fig(diff,'Changed pixels (pink)'));g.appendChild(fig(plane,'LSB plane of stego image'));
+ const g2=$('g2');g2.appendChild(fig(hist(src.data,r.d,300,120),'Histogram: original (cyan) vs stego (pink)'));
+ const b=document.createElement('button');b.className='go';b.textContent='Download stego image (PNG) ↓';b.onclick=()=>out.toBlob(bl=>dl('stego_image.png',bl));$('dlw').appendChild(b);
+ }catch(e){say(o,'Error: '+e.message,'er')}};
+$('goX').onclick=async()=>{const o=$('oX'),f=$('xf').files[0];if(!f)return say(o,'Please choose a stego image.','er');
+ try{const c=await load(f,true),u=unpack(await extractCore(px(c).data,$('xp').value));
+ if(u.type==='text'){o.innerHTML='<div class="msg ok">✓ Hidden message extracted:</div><pre></pre>';o.querySelector('pre').textContent=u.text}
+ else{o.innerHTML='<div class="msg ok">✓ Hidden file extracted: <span id="fn"></span> ('+fmt(u.data.length)+')</div><div id="fp"></div>';$('fn').textContent=u.name;
+  const b=document.createElement('button');b.className='go';b.textContent='Download '+u.name+' ↓';b.onclick=()=>dl(u.name,new Blob([u.data]));$('fp').appendChild(b);
+  if(/\.(png|jpe?g|gif|webp|bmp)$/i.test(u.name)){const im=document.createElement('img');im.style.marginTop='12px';im.src=URL.createObjectURL(new Blob([u.data]));$('fp').appendChild(im)}}
+ }catch(e){say(o,'Error: '+e.message,'er')}};
+$('goT').onclick=async()=>{const l=$('oT');l.innerHTML='';const add=(n,ok)=>{const li=document.createElement('li');li.style.color=ok?'var(--ok)':'var(--er)';li.textContent=(ok?'✓ ':'✗ ')+n;l.appendChild(li)};
+ const w=96,h=96,d=new Uint8ClampedArray(w*h*4);crypto.getRandomValues(d);for(let i=3;i<d.length;i+=4)d[i]=255;
+ const file=new Uint8Array(1200).map((_,i)=>i*7);
+ for(const [n,pw,sh,dp] of [['Plain text, 1 bit','',false,1],['Encrypted text, 1 bit','pass123',false,1],['Encrypted + random spread, 2 bits','pass123',true,2],['Encrypted + random spread, 3 bits','pass123',true,3]]){
+  try{const r=await embedCore(d,packText('Hello ✓ secret'),{pw,shuf:sh,depth:dp});add(n,unpack(await extractCore(r.d,pw)).text==='Hello ✓ secret')}catch(e){add(n+' – '+e.message,false)}}
+ try{const r=await embedCore(d,packFile('a.bin',file),{pw:'k',shuf:true,depth:2}),u=unpack(await extractCore(r.d,'k'));add('File hiding (1200 bytes)',u.name==='a.bin'&&u.data.every((v,i)=>v===file[i]))}catch(e){add('File hiding – '+e.message,false)}
+ try{const r=await embedCore(d,packText('x'),{pw:'right',shuf:true,depth:1});try{await extractCore(r.d,'wrong');add('Wrong password rejected',false)}catch(e){add('Wrong password rejected',true)}}catch(e){add('Wrong password – '+e.message,false)}
+ try{await embedCore(d,new Uint8Array(9000),{pw:'',shuf:false,depth:1});add('Oversized data rejected',false)}catch(e){add('Oversized data rejected',true)}
+ try{await extractCore(d,'');add('Clean image reports no hidden data',false)}catch(e){add('Clean image reports no hidden data',true)}};
+
+document.querySelectorAll('.dz').forEach(z=>{const inp=z.querySelector('input'),t=z.querySelector('.dzt');
+ ['dragenter','dragover'].forEach(ev=>z.addEventListener(ev,e=>{e.preventDefault();z.classList.add('drag')}));
+ ['dragleave','drop'].forEach(ev=>z.addEventListener(ev,e=>{e.preventDefault();z.classList.remove('drag')}));
+ z.addEventListener('drop',e=>{if(e.dataTransfer.files.length){inp.files=e.dataTransfer.files;inp.dispatchEvent(new Event('change'))}});
+ inp.addEventListener('change',()=>{if(inp.files[0])t.textContent=inp.files[0].name})});
+</script></body></html>
